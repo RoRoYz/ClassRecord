@@ -74,7 +74,7 @@
 			
 			Id Number:    <?php echo $idnum;?> <br>
 			Name:         <?php echo "$fname $lname";?> <br>
-			Quiz Average: <?php echo $qave; ?>
+			Quiz Average: <?php echo round($qave,2); ?>
 		
 		<input type="hidden" name="id" value="<?php echo $id; ?>">
 			<?php 

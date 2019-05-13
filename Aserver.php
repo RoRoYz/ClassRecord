@@ -12,11 +12,31 @@
 	$add = false;
 	$delete=false;
 
+	// retrieve records
+	$results = mysqli_query($db,"SELECT * FROM Assignment");
 
 	if (isset($_POST['add'])) {
 		$Aname=$_POST['Aname'];
 		mysqli_query($db,"ALTER TABLE Assignment ADD $Aname FLOAT(6) NOT NULL");
 		$_SESSION['message'] = "Assignment added"; 
+		//for updating the quiz averages of each student after adding a quiz
+		$sql="SELECT * FROM Assignment";
+		$query=mysqli_query($db,$sql);    
+		$num=mysqli_num_fields($query);
+		$num=$num-3;
+		
+		while ($row = mysqli_fetch_array($results)) { 
+			$x=0; 
+			$sum=0;
+			while($x<$num){
+				$A[$x] = $row[$x+3];
+				$sum=$sum+$A[$x];
+				$x=$x+1;
+			}
+			$ave=$sum/$x;
+			mysqli_query($db,"UPDATE Assignment SET AssignmentAve=$ave WHERE id={$row['id']}");
+		}
+
 		header('location: Assignment.php');
 	}
 
@@ -64,11 +84,30 @@
 		$Aname=$_POST['Aname'];
 		mysqli_query($db,"ALTER TABLE Assignment DROP COLUMN $Aname");
 		$_SESSION['message'] = "Assignment deleted"; 
+
+		//for updating the quiz averages of each student after deleting as Assignment
+		$sql="SELECT * FROM Assignment";
+		$query=mysqli_query($db,$sql);    
+		$num=mysqli_num_fields($query);
+		$num=$num-3;
+		
+
+		while ($row = mysqli_fetch_array($results)) { 
+			$x=0; 
+			$sum=0;
+			while($x<$num){
+				$A[$x] = $row[$x+3];
+				$sum=$sum+$A[$x];
+				$x=$x+1;
+			}
+			$ave=$sum/$x;
+			mysqli_query($db,"UPDATE Assignment SET AssignmentAve=$ave WHERE id={$row['id']}");
+
+		}
+
 		header('location: Assignment.php');
 	}
 
 
-	// retrieve records
-	$results = mysqli_query($db,"SELECT * FROM Assignment");
 
 // ...

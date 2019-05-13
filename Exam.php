@@ -34,14 +34,6 @@
 			}
 		}
 
-		while ($row = mysqli_fetch_array($results)) { 
-			$x=0; 
-			while($x<$num){
-				$q[$x] = $row[$x+3];
-				$x=$x+1;
-			}
-		}
-
 	}
 	if (isset($_GET['add'])){
 		$add = true;
@@ -82,17 +74,20 @@
 			
 			Id Number:    <?php echo $idnum;?> <br>
 			Name:         <?php echo "$fname $lname";?> <br>
-			Exam Average: <?php echo $Eave; ?>
+			Exam Average: <?php echo round($Eave,2); ?>
 		
 		<input type="hidden" name="id" value="<?php echo $id; ?>">
 			<?php 
 
 				while ($row = mysqli_fetch_array($results)) { 
 					$x=0; 
-					while($x<$num){
-						$q[$x] = $row[$x+3];
-						$x=$x+1;
+					if($row['id']===$id){
+						while($x<$num){
+							$E[$x] = $row[$x+3];
+							$x=$x+1;
+						}
 					}
+					
 				}
 
 				$x=0;
@@ -164,7 +159,7 @@
 		<?php while ($row = mysqli_fetch_array($results)) { ?>
 			<tr>
 				<td><?php echo $row['IdNumber']; ?></td>
-				<td><?php echo $row['ExamAve']; ?></td>
+				<td><?php echo round($row['ExamAve'],2); ?></td>
 				<?php $x=0;
 					  while($x<$num){ ?>
 					<td><?php echo $row[$x+3]?></td>

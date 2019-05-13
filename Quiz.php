@@ -34,14 +34,6 @@
 			}
 		}
 
-		while ($row = mysqli_fetch_array($results)) { 
-			$x=0; 
-			while($x<$num){
-				$q[$x] = $row[$x+3];
-				$x=$x+1;
-			}
-		}
-
 	}
 	if (isset($_GET['add'])){
 		$add = true;
@@ -89,10 +81,13 @@
 
 				while ($row = mysqli_fetch_array($results)) { 
 					$x=0; 
-					while($x<$num){
-						$q[$x] = $row[$x+3];
-						$x=$x+1;
+					if($row['id']===$id){
+						while($x<$num){
+							$q[$x] = $row[$x+3];
+							$x=$x+1;
+						}
 					}
+					
 				}
 
 				$x=0;
@@ -164,7 +159,7 @@
 		<?php while ($row = mysqli_fetch_array($results)) { ?>
 			<tr>
 				<td><?php echo $row['IdNumber']; ?></td>
-				<td><?php echo $row['QuizAve']; ?></td>
+				<td><?php echo round($row['QuizAve'],2); ?></td>
 				<?php $x=0;
 					  while($x<$num){ ?>
 					<td><?php echo $row[$x+3]?></td>
